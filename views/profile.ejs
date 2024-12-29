@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile</title>
+  <style>
+    /* General styles for the layout */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Profile Section */
+    .profile-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+      background-color: #fff;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .profile-header h3 {
+      font-size: 1.5rem;
+      color: #333;
+    }
+
+    .profile-img-container {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      overflow: hidden;
+      margin-right: 20px;
+    }
+
+    .profile-img-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border: 1px solid gray;
+    }
+
+    .icons a {
+      font-size: 20px;
+      margin-right: 10px;
+      color: #333;
+    }
+
+    /* Profile info section */
+    .profile-info {
+      padding: 20px;
+      background-color: #fff;
+      margin-top: 10px;
+    }
+
+    .profile-info h3 {
+      font-size: 1.25rem;
+      color: #333;
+    }
+
+    .profile-info p {
+      color: #666;
+      font-size: 0.875rem;
+      margin-top: 10px;
+    }
+
+    /* Buttons */
+    .button {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #007BFF;
+      color: #fff;
+      border-radius: 5px;
+      text-decoration: none;
+      font-size: 0.875rem;
+      margin-top: 20px;
+    }
+
+    .button:hover {
+      background-color: #0056b3;
+    }
+
+    /* Post Container */
+    .posts-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      padding: 20px;
+      margin-bottom: 50px;
+    }
+
+    .post {
+      background-color: #fff;
+      width: 48%;
+      margin-bottom: 20px;
+      padding: 10px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .post img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+
+    .post-info {
+      padding-top: 10px;
+    }
+
+    .post-info h4 {
+      font-size: 1rem;
+      color: #333;
+      margin: 5px 0;
+    }
+
+    .post-info p {
+      font-size: 0.875rem;
+      color: #666;
+    }
+
+    .delete-btn {
+      background-color: #dc3545;
+      color: #fff;
+      padding: 5px 10px;
+      margin: 10px 0px;
+      border-radius: 5px;
+      text-decoration: none;
+      font-size: 0.875rem;
+    }
+
+    .delete-btn:hover {
+      background-color: #c82333;
+    }
+
+    .address {
+      padding: 5px 0px;
+    }
+
+    .hotel {
+      font-size: 30px;
+      padding-top: 20px;
+      font-weight: 600;
+      text-align: center;
+
+    }
+
+    /* Media Queries for Responsiveness */
+    @media (max-width: 768px) {
+
+      /* Profile Header */
+      .profile-header {
+        align-items: flex-start;
+      }
+
+      .profile-img-container {
+        width: 100px;
+        height: 100px;
+        margin-bottom: 10px;
+      }
+
+      /* Posts layout */
+      .posts-container {
+        padding: 10px;
+      }
+
+      .post {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <% include ./partials/header.ejs %>
+
+    <div class="profile-header">
+      <div class="profile-img-container">
+        <img src="/images/uploads/<%= user.profileImage %>" alt="Profile Image">
+      </div>
+      <div class="icons">
+        <a href="/logout"><i class="ri-logout-box-line"></i> Logout</a>
+      </div>
+    </div>
+
+    <div class="profile-info">
+      <h3>
+        <%= user.name %>
+      </h3>
+      <p>
+        <%= user.bio %>
+      </p>
+      <a href="/edit" class="button">Edit Profile</a>
+      <a href="/guestadminpanel" class="button">All Bookings</a>
+    </div>
+
+    <!-- Posts Section -->
+    <div class="posts-container">
+      <% user.posts.reverse().forEach(function(post) { %>
+        <div class="post">
+          <img src="/images/uploads/<%= post.picture %>" alt="<%= post.hotelname %>">
+          <div class="post-info">
+            <h4>Hotel Name: <%= post.hotelname %>
+            </h4>
+            <p class="address">
+              Hotel Address: <%= post.caption %>
+            </p>
+            <a href="/deletePost/<%= post._id %>" class="delete-btn">Delete</a>
+          </div>
+        </div>
+        <% }) %>
+    </div>
+
+    <% include ./partials/footer.ejs %>
+</body>
+
+</html>

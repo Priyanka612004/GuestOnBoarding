@@ -1,0 +1,153 @@
+<title>Edit Profile</title>
+<style>
+  .heading {
+    font-size: 32px;
+    padding: 20px;
+    font-weight: bold;
+    text-align: center;
+    color: #333;
+  }
+
+  .form-container {
+    max-width: 600px;
+    margin: 0 auto;
+    background: #f9f9f9;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .profile-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .profile-image {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: #e0e7ff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border: 3px solid #3b82f6;
+  }
+
+  .profile-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .edit-btn {
+    color: #2563eb;
+    background: transparent;
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+  }
+
+  .edit-btn:hover {
+    color: #1e3a8a;
+    text-decoration: underline;
+  }
+
+  .form-input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 12px;
+    border: 2px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 14px;
+    background: #fff;
+    outline: none;
+    transition: border-color 0.3s ease;
+  }
+
+  .form-input:focus {
+    border-color: #3b82f6;
+  }
+
+  .submit-btn {
+    width: 100%;
+    padding: 12px;
+    margin-top: 16px;
+    background: #3b82f6;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+
+  .submit-btn:hover {
+    background-color: #2563eb;
+    transform: scale(1.05);
+  }
+</style>
+
+<% include ./partials/header.ejs %>
+  <div class="w-full min-h-screen bg-gray-50 text-gray-800 py-5">
+    <h2 class="heading">Edit Profile</h2>
+
+    <!-- Form Container -->
+    <div class="form-container">
+      <!-- Profile Image Section -->
+      <div class="profile-section">
+        <div class="profile-image">
+          <% if (user.image) { %>
+            <img src="<%= user.image %>" alt="Profile Image">
+            <% } else { %>
+              <span class="text-gray-500 text-sm">No Image</span>
+              <% } %>
+        </div>
+        <button id="editbtn" class="edit-btn">Change Profile Image</button>
+      </div>
+
+      <!-- Edit Account Details Form -->
+      <form action="/update" method="post" enctype="multipart/form-data">
+        <!-- Hidden file input -->
+        <input id="imageinput" hidden type="file" name="image" accept="image/*">
+
+        <!-- Username -->
+        <input class="form-input" type="text" placeholder="Username" name="username" value="<%= user.username %>">
+
+        <!-- Name -->
+        <input class="form-input" type="text" placeholder="Name" name="name" value="<%= user.name %>">
+
+        <!-- Bio -->
+        <textarea class="form-input" placeholder="Bio" name="bio" rows="3"><%= user.bio %></textarea>
+
+        <!-- Submit Button -->
+        <button class="submit-btn" type="submit">Update Details</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Open file input on button click
+    document.querySelector("#editbtn").addEventListener("click", function () {
+      document.querySelector("#imageinput").click();
+    });
+
+    // Display preview of the selected profile image
+    document.querySelector("#imageinput").addEventListener("change", function (event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          const imageElement = document.querySelector(".profile-image");
+          imageElement.innerHTML = `<img src="${e.target.result}" alt="Profile Image">`;
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+  </script>
+  <% include ./partials/footer.ejs %>

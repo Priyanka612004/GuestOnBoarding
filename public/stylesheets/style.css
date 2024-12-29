@@ -1,0 +1,10 @@
+.story::-webkit-scrollbar{
+  display: none;
+}
+
+a:focus {
+  outline: none !important;
+}
+body:{
+  background-color: aliceblue;
+}

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        <%= post.hotelname %>
+    </title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+
+        .container {
+            justify-items: center;
+            max-width: 800px;
+            margin: auto;
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            width: 150px;
+            height: 150px;
+            margin: 20px 0;
+        }
+
+        .details {
+            padding: 20px;
+            text-align: left;
+        }
+
+        button {
+            width: 150px;
+            height: 40px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Welcome to <%= post.hotelname %>
+        </h1>
+        <div class="logo">
+            <img src="/images/uploads/<%= post.picture %>" alt="" class="logo">
+        </div>
+        <div class="details">
+            <p><strong>Address: </strong>
+                <%= post.caption %>
+            </p>
+            <p><strong>Uploaded By:</strong>
+                <%= post.user.name %>
+            </p>
+        </div>
+        <div>
+            <a href="/hotelform/<%= post._id %>">
+                <button>Book</button>
+            </a>
+        </div>
+
+    </div>
+</body>
+
+</html>

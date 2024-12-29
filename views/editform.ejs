@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Booking</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .form-container {
+            width: 100%;
+            max-width: 600px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        label {
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        select {
+            padding: 12px;
+            font-size: 14px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        button {
+            padding: 12px;
+            background-color: #6a0dad;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="form-container">
+        <h2>Edit Booking for <%= booking.hotelname %>
+        </h2>
+
+        <form action="/editform/<%= booking._id %>" method="POST">
+
+            <div>
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" value="<%= booking.name %>" required>
+            </div>
+
+            <div>
+                <label for="phone">Phone:</label>
+                <input type="text" id="phone" name="phone" value="<%= booking.phone %>" required>
+            </div>
+
+            <div>
+                <label for="address">Address:</label>
+                <input type="text" id="address" name="address" value="<%= booking.address %>" required>
+            </div>
+
+            <div>
+                <label for="checkInDate">Check-in Date:</label>
+                <input type="date" id="checkInDate" name="checkInDate"
+                    value="<%= booking.checkInDate.toISOString().split('T')[0] %>" required>
+            </div>
+
+            <div>
+                <label for="checkOutDate">Check-out Date:</label>
+                <input type="date" id="checkOutDate" name="checkOutDate"
+                    value="<%= booking.checkOutDate.toISOString().split('T')[0] %>" required>
+            </div>
+
+            <div>
+                <label for="purpose">Purpose:</label>
+                <select id="purpose" name="purpose">
+                    <option value="business" <% if (booking.purpose==='business' ) { %> selected <% } %>>Business
+                    </option>
+                    <option value="personal" <% if (booking.purpose==='personal' ) { %> selected <% } %>>Personal
+                    </option>
+                    <option value="tourist" <% if (booking.purpose==='tourist' ) { %> selected <% } %>>Tourist</option>
+                </select>
+            </div>
+
+            <div>
+                <label for="idProof">ID Proof:</label>
+                <input type="text" id="idProof" name="idProof" value="<%= booking.idProof %>" required>
+            </div>
+
+            <button type="submit">Save Changes</button>
+
+        </form>
+    </div>
+
+</body>
+
+</html>

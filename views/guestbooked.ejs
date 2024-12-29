@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guest Receipt</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        #downloadReceiptBtn {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        #downloadReceiptBtn:hover {
+            background-color: #0056b3;
+        }
+
+        .receipt-container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid #ddd;
+        }
+
+        th,
+        td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="receipt" class="receipt-container">
+        <h1 style="text-align: center;">Guest Bill Receipt</h1>
+
+        <table>
+            <tbody>
+                <tr>
+                    <th>Full Name</th>
+                    <td>
+                        <%= booking.name %>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Mobile Number</th>
+                    <td>
+                        <%= booking.phone %>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Address</th>
+                    <td>
+                        <%= booking.address %>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Purpose of Visit</th>
+                    <td>
+                        <%= booking.purpose %>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Stay From</th>
+                    <td>
+                        <%= booking.checkInDate %>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Stay To</th>
+                    <td>
+                        <%= booking.checkOutDate %>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Email ID</th>
+                    <td>
+                        <%= booking.email %>
+                    </td>
+                </tr>
+                <tr>
+                    <th>ID Proof Number</th>
+                    <td>
+                        <%= booking.idProof %>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <button id="downloadReceiptBtn">Download Receipt as PDF</button>
+
+    <script>
+        document.getElementById("downloadReceiptBtn").onclick = async (event) => {
+            // Prevent the default action (in case there's any anchor link)
+            event.preventDefault();
+
+            // Generate PDF from receipt content
+            const { jsPDF } = window.jspdf;
+            const receiptElement = document.getElementById("receipt");
+
+            // Use html2canvas to capture the receipt with high resolution
+            const canvas = await html2canvas(receiptElement, {
+                scale: 2, // Higher resolution
+                useCORS: true // Handle cross-origin images if any
+            });
+
+            // Get the image data
+            const imgData = canvas.toDataURL("image/png");
+
+            // Dynamically adjust PDF dimensions to match the screen size and apply scaling factor
+            const screenWidth = canvas.width; // Original screen width of content
+            const screenHeight = canvas.height; // Original screen height of content
+
+            // Factor by which you want to increase the PDF size
+            const scaleFactor = 1.5; // Increase by 50%, adjust this value as needed
+
+            // Scale the screen dimensions and adjust for aspect ratio
+            const pdfWidth = (screenHeight * scaleFactor); // Increased width
+            const pdfHeight = (screenHeight * scaleFactor); // Increased height
+
+            // Initialize jsPDF with dynamic height
+            const doc = new jsPDF("p", "mm", [pdfWidth, pdfHeight]);
+
+            // Add the image to the PDF
+            doc.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+
+            // Save the PDF
+            doc.save("Guest_Receipt.pdf");
+
+            // After downloading the PDF, navigate to the 'thank you' page
+            window.location.href = '/thankyou';
+        };
+    </script>
+</body>
+
+</html>

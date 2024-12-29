@@ -1,0 +1,27 @@
+<% if (footer) { %>
+  <div class="footer text-white flex justify-between items-center w-full fixed bottom-0 z-[10] bg-zinc-900 px-7 py-3">
+    <a href="/feed" class="flex-1 text-center">Home</a>
+    <% if (isMainAdmin) { %>
+      <a id="changeif" href="/upload" class="flex-1 text-center">Hotel Registeration</a>
+      <% } %>
+        <% if (isGuestAdmin) { %>
+          <a href="/guestpanel" class="flex-1 text-center">Guest Details</a>
+          <% } %>
+            <a href="/profile" class="flex-1 text-center">Profile</a>
+  </div>
+  <% } %>
+
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function (event) {
+        var scrollpos = localStorage.getItem('scrollpos');
+        if (scrollpos) window.scrollTo(0, scrollpos);
+      });
+
+      window.onbeforeunload = function (e) {
+        localStorage.setItem('scrollpos', window.scrollY);
+      };
+    </script>
+    </body>
+
+    </html>

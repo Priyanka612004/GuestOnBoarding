@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        h2 {
+            text-align: center;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        form input,
+        form textarea,
+        form select {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 1rem;
+        }
+
+        form input[type="submit"] {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        form input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                padding: 15px;
+            }
+
+            h2 {
+                font-size: 1.2rem;
+            }
+
+            form input,
+            form select,
+            form textarea {
+                font-size: 0.9rem;
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Hotel Booking</h2>
+
+        <form action="/hotelform/<%= post._id %>" enctype="application/x-www-form-urlencoded" method="post"
+            id="hotel-form">
+            <!-- Add hidden input for postid -->
+            <input type="hidden" name="postid" value="<%= post._id %>">
+
+            <!-- Hotel Name -->
+            <input type="text" placeholder="Hotel Name" name="hotelname" value="<%= post.hotelname || '' %>" required>
+
+            <!-- Full Name -->
+            <input type="text" placeholder="Full Name" name="name" value="<%= user.name || '' %>" required>
+
+            <!-- Email -->
+            <input type="email" placeholder="Email" name="email" value="<%= user.email || '' %>" required>
+
+            <!-- Mobile Number -->
+            <input type="tel" placeholder="Phone" name="phone" value="<%= user.phone || '' %>" required
+                pattern="^\+?[0-9]{10,15}$" title="Please enter a valid phone number">
+
+            <!-- Stay Dates (From and To) -->
+            <div style="display: flex; gap: 15px;">
+                <input type="date" placeholder="Check-In Date" name="checkInDate" required id="checkInDate">
+                <input type="date" placeholder="Check-Out Date" name="checkOutDate" required id="checkOutDate">
+            </div>
+
+            <!-- Address -->
+            <textarea name="address" placeholder="Write an Address..." required><%= user.address || '' %></textarea>
+
+            <!-- Purpose of Visit -->
+            <select name="purpose" required>
+                <option value="business">Business</option>
+                <option value="personal">Personal</option>
+                <option value="tourist">Tourist</option>
+            </select>
+
+            <!-- ID Proof Number -->
+            <input type="text" placeholder="ID Proof Number" name="idProof" required>
+
+            <!-- Submit Button -->
+            <div class="btn-container">
+                <input type="submit" value="Add">
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Get today's date
+        const today = new Date().toISOString().split('T')[0];
+
+        // Ensure check-in date is today or in the future and check-out date is after check-in date
+        document.getElementById("hotel-form").addEventListener("submit", function (event) {
+            const checkInDate = new Date(document.getElementById("checkInDate").value);
+            const checkOutDate = new Date(document.getElementById("checkOutDate").value);
+
+            // Check if the check-in date is today or in the future
+            if (checkInDate < new Date(today)) {
+                alert("Check-in date cannot be in the past. Please choose today's date or a future date.");
+                event.preventDefault(); // Prevent form submission
+                return;
+            }
+
+            // Check if check-out date is after check-in date
+            if (checkOutDate <= checkInDate) {
+                alert("Check-out date must be after the check-in date.");
+                event.preventDefault(); // Prevent form submission
+            }
+        });
+    </script>
+</body>
+
+</html>

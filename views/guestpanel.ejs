@@ -1,0 +1,113 @@
+<title>Guest Details</title>
+<style>
+    /* Styling for the post container */
+    #oneRow {
+        height: 150px;
+        border: 2px solid #6a0dad;
+        /* Purple border */
+        border-radius: 8px;
+        background-color: #f4f4f9;
+        /* Light gray background */
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 15px;
+        margin: 10px 0;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        /* Light shadow for depth */
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    #oneRow:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Styling for the buttons */
+    table button {
+        background-color: #6a0dad;
+        /* Purple button background */
+        color: white;
+        border: none;
+        border-radius: 4px;
+        padding: 8px 12px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background-color 0.2s, transform 0.2s;
+    }
+
+    table button:hover {
+        background-color: #5500a3;
+        /* Darker purple on hover */
+        transform: scale(1.05);
+    }
+
+    /* Add spacing between rows and text alignment */
+    table td {
+        padding: 10px;
+        text-align: left;
+        vertical-align: middle;
+    }
+
+    /* Styling for the container */
+    .posts {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 20px;
+        /* Space between post elements */
+    }
+
+    /* Styling for the page background */
+    .w-full.bg-white-900 {
+        background-color: #eef2f7;
+        /* Light blue-gray background */
+        padding: 20px;
+        border-radius: 8px;
+    }
+
+    /* Styling for "No posts found" message */
+    .no-posts {
+        font-size: 18px;
+        color: #6a0dad;
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .heading {
+        font-size: 30px;
+        padding: 20px;
+        font-weight: 600;
+        text-align: center;
+    }
+</style>
+
+<% include ./partials/header.ejs %>
+
+    <div class="pb-20">
+        <h2 class="heading">Guest Details</h2>
+        <div class="w-full bg-white-900 text-black">
+            <div class="posts w-full flex gap-1 mt-5 flex-wrap">
+                <% bookings.forEach(function(elem) { %>
+                    <div id="oneRow" class="flex">
+                        <table>
+                            <tr>
+                                <td><strong>Hotel Name: </strong>
+                                    <%= elem.hotelname %>
+                                        <br>Name:
+                                        <%= elem.name %>
+
+                                </td>
+                                <td><a href="/view/<%=elem._id%>"><button>View</button></a></td>
+                                <td><a href="/editform/<%=elem._id%>"><button>Edit</button></a></td>
+                                <td><a href="/deleteBookingguest/<%=elem._id%>"><button>Delete</button></a></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <% }); %>
+
+            </div>
+        </div>
+    </div>
+
+    <% include ./partials/footer.ejs %>

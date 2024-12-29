@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Guest Receipt</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        #downloadReceiptBtn,
+        #printReceiptBtn {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        #downloadReceiptBtn:hover,
+        #printReceiptBtn:hover {
+            background-color: #0056b3;
+        }
+
+        .receipt-container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid #ddd;
+        }
+
+        th,
+        td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="receipt" class="receipt-container">
+        <h1 style="text-align: center;">Guest Bill Receipt</h1>
+
+        <table>
+            <tbody>
+                <tr>
+                    <th>Full Name</th>
+                    <td>
+                        <%= booking.name %>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Mobile Number</th>
+                    <td>
+                        <%= booking.phone %>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Address</th>
+                    <td>
+                        <%= booking.address %>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Purpose of Visit</th>
+                    <td>
+                        <%= booking.purpose %>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Stay From</th>
+                    <td>
+                        <%= booking.checkInDate %>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Stay To</th>
+                    <td>
+                        <%= booking.checkOutDate %>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Email ID</th>
+                    <td>
+                        <%= booking.email %>
+                    </td>
+                </tr>
+                <tr>
+                    <th>ID Proof Number</th>
+                    <td>
+                        <%= booking.idProof %>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <button id="downloadReceiptBtn">Download Receipt as PDF</button>
+    <button id="printReceiptBtn">Print Receipt</button>
+
+    <script>
+        // Download PDF button functionality
+        document.getElementById("downloadReceiptBtn").onclick = async (event) => {
+            event.preventDefault();
+
+            const { jsPDF } = window.jspdf;
+            const receiptElement = document.getElementById("receipt");
+
+            const canvas = await html2canvas(receiptElement, {
+                scale: 2,
+                useCORS: true
+            });
+
+            const imgData = canvas.toDataURL("image/png");
+            const pdfWidth = (canvas.height * 1.5);
+            const pdfHeight = (canvas.height * 1.5);
+
+            const doc = new jsPDF("p", "mm", [pdfWidth, pdfHeight]);
+            doc.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+            doc.save("Guest_Receipt.pdf");
+
+            window.location.href = '/thankyou'; // Redirect after download (optional)
+        };
+
+        // Print Receipt button functionality
+        document.getElementById("printReceiptBtn").onclick = () => {
+            const receiptElement = document.getElementById("receipt");
+
+            // Open the print dialog for the receipt content
+            const printWindow = window.open('', '', 'width=800,height=600');
+            printWindow.document.write('<html><head><title>Print Receipt</title></head><body>');
+            printWindow.document.write(receiptElement.outerHTML);
+            printWindow.document.write('</body></html>');
+            printWindow.document.close();
+
+            // Trigger the print dialog
+            printWindow.print();
+        };
+    </script>
+    <script>
+        document.getElementById("printReceiptBtn").onclick = () => {
+            const receiptElement = document.getElementById("receipt");
+
+            // Open the print window with specific dimensions
+            const printWindow = window.open('', '', 'width=800,height=600');
+
+            // Write the HTML structure and styles for the print window
+            printWindow.document.write('<html><head><title>Print Receipt</title>');
+
+            // Add the CSS for the print window, ensuring table styling is included
+            printWindow.document.write(`
+                <style>
+                    body {
+                        font-family: Arial, sans-serif;
+                        background-color: #f9f9f9;
+                    }
+    
+                    table {
+                        width: 100%;
+                        border-collapse: collapse;
+                        margin-top: 20px;
+                    }
+    
+                    table, th, td {
+                        border: 1px solid #ddd;
+                    }
+    
+                    th, td {
+                        padding: 10px;
+                        text-align: left;
+                    }
+    
+                    th {
+                        background-color: #f2f2f2;
+                    }
+    
+                    .receipt-container {
+                        max-width: 800px;
+                        margin: 20px auto;
+                        background: white;
+                        padding: 20px;
+                        border-radius: 8px;
+                        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                    }
+    
+                    /* Ensure content is properly aligned and displayed */
+                    .receipt-container h1 {
+                        text-align: center;
+                        font-size: 24px;
+                        margin-bottom: 20px;
+                    }
+    
+                    /* Extra adjustments for printing */
+                    @media print {
+                        body {
+                            font-size: 12pt;
+                        }
+    
+                        .receipt-container {
+                            width: 100%;
+                            box-shadow: none;
+                        }
+                    }
+                </style>
+            `);
+
+            // Write the content of the receipt to the print window
+            printWindow.document.write('</head><body>');
+            printWindow.document.write(receiptElement.outerHTML);
+            printWindow.document.write('</body></html>');
+
+            // Close the document to complete the writing process
+            printWindow.document.close();
+
+            // Trigger the print dialog in the print window
+            printWindow.print();
+        };
+    </script>
+
+</body>
+
+</html>

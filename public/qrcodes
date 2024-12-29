@@ -1,0 +1,2 @@
+mkdir -p public/qrcodes
+chmod 755 public/qrcodes
